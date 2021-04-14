@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
-import './App.css';
 
 
 const Button = ({handleClick, text}) => {
@@ -18,25 +17,22 @@ function App() {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
-  function handleGoodClick() {
-    setGood(good + 1)
-  }
-  function handleNeutralClick() {
-    setNeutral(neutral + 1)
-  }
-  function handleBadClick() {
-    setBad(bad + 1)
-  }
+  let all = good + neutral + bad;
+  let avg = (good * 1 + bad * -1)/ all;
+  let pos = good / all;
 
   return (
     <div>
-      <Button handleClick={handleGoodClick} text='good' />
-      <Button handleClick={handleNeutralClick} text='neutral' />
-      <Button handleClick={handleBadClick} text='bad' />
+      <Button handleClick={() => setGood(good + 1)} text='good' />
+      <Button handleClick={() => setNeutral(neutral + 1)} text='neutral' />
+      <Button handleClick={() => setBad(bad + 1)} text='bad' />
       <h2>Statistics</h2>
       <p>good {good}</p>
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
+      <p>all {all}</p>
+      <p>average {avg}</p>
+      <p>positive {pos}</p>
     </div>
   );
 }
