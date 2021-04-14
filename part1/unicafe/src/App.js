@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 
+const Statistics = (props) => {
+    return (
+      <div>
+      <p>average {props.avg}</p>
+      <p>positive {props.positive}</p>
+      </div>
+    )
+}
 
 const Button = ({handleClick, text}) => {
   return (
@@ -31,8 +39,7 @@ function App() {
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
       <p>all {all}</p>
-      <p>average {avg}</p>
-      <p>positive {pos}</p>
+      <Statistics avg={avg} positive={pos} />
     </div>
   );
 }
