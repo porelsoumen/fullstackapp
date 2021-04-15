@@ -1,11 +1,25 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 
-const Statistics = (props) => {
+const Statistics = ({good, neutral, bad}) => {
+    if (good === 0 && neutral === 0 && bad === 0) {
+      return (
+        <div>
+        <p>No feedback given</p>
+        </div>
+      )
+    }
+    const all = good + bad + neutral;
+    const avg = (good * 1 + bad * -1)/ all;
+    const pos = good / all;
     return (
       <div>
-      <p>average {props.avg}</p>
-      <p>positive {props.positive}</p>
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
+      <p>all {all}</p>
+      <p>average {avg}</p>
+      <p>positive {pos}</p>
       </div>
     )
 }
@@ -26,8 +40,6 @@ function App() {
   const [bad, setBad] = useState(0);
 
   let all = good + neutral + bad;
-  let avg = (good * 1 + bad * -1)/ all;
-  let pos = good / all;
 
   return (
     <div>
@@ -35,11 +47,7 @@ function App() {
       <Button handleClick={() => setNeutral(neutral + 1)} text='neutral' />
       <Button handleClick={() => setBad(bad + 1)} text='bad' />
       <h2>Statistics</h2>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <Statistics avg={avg} positive={pos} />
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   );
 }
