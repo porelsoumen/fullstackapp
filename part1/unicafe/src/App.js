@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
+import './App.css'
 
 const Statistics = ({good, neutral, bad}) => {
     if (good === 0 && neutral === 0 && bad === 0) {
@@ -14,14 +15,22 @@ const Statistics = ({good, neutral, bad}) => {
     const pos = good / all;
     return (
       <div>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average {avg}</p>
-      <p>positive {pos}</p>
+      <Statistic text="good" value={good} />
+      <Statistic text="neutral" value={neutral} />
+      <Statistic text="bad" value={bad} />
+      <Statistic text="all" value={all} />
+      <Statistic text="average" value={avg} />
+      <Statistic text="positive" value={pos} />
       </div>
     )
+}
+
+const Statistic = (props) => {
+  return (
+    <div>
+    <p>{props.text} {props.value}</p>
+    </div>
+  )
 }
 
 const Button = ({handleClick, text}) => {
@@ -43,10 +52,12 @@ function App() {
 
   return (
     <div>
+      <h2>give feedback</h2>
       <Button handleClick={() => setGood(good + 1)} text='good' />
       <Button handleClick={() => setNeutral(neutral + 1)} text='neutral' />
       <Button handleClick={() => setBad(bad + 1)} text='bad' />
-      <h2>Statistics</h2>
+      <br/>
+      <h2>statistics</h2>
       <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   );
