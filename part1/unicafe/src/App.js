@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css'
 
 const Statistics = ({good, neutral, bad}) => {
@@ -13,23 +12,28 @@ const Statistics = ({good, neutral, bad}) => {
     const all = good + bad + neutral;
     const avg = (good * 1 + bad * -1)/ all;
     const pos = good / all;
+    const symbol = '%';
+
     return (
       <div>
+      <table><tbody>
       <Statistic text="good" value={good} />
       <Statistic text="neutral" value={neutral} />
       <Statistic text="bad" value={bad} />
       <Statistic text="all" value={all} />
       <Statistic text="average" value={avg} />
-      <Statistic text="positive" value={pos} />
+      <Statistic text="positive" value={pos} symbol={symbol}/>
+      </tbody>
+      </table>
       </div>
     )
 }
 
 const Statistic = (props) => {
   return (
-    <div>
-    <p>{props.text} {props.value}</p>
-    </div>
+    <>
+    <tr><td>{props.text}</td><td> {props.value}</td><td> {props.symbol ? props.symbol : ''}</td></tr>
+    </>
   )
 }
 
@@ -47,8 +51,6 @@ function App() {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
-
-  let all = good + neutral + bad;
 
   return (
     <div>
