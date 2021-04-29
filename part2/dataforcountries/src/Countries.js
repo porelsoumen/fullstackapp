@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Country from './Country'
 
 const Countries = (props) => {
+    const [selectedCountry, setSelectedCountry] = useState('')
+
     if (props.matches.length > 10) {
       return (
         <div>Too many matches, specify another filter</div>
@@ -25,13 +28,14 @@ const Countries = (props) => {
         )
     }
     else {
-      return (
-        props.matches.map(country => {
-            return (
-            <div key={country.name}>{country.name}</div>
-            ) 
-        })
-      )
+        return (
+            props.matches.map(country => {
+                return (
+                    <div key={country.name}>{country.name}<button onClick={() => setSelectedCountry(country.name)}>show</button>
+                    {country.name === selectedCountry && <Country country={country} />}</div>
+                )
+            })
+        )  
     }
   }
 
