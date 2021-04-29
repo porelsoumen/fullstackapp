@@ -13,17 +13,7 @@ const Countries = (props) => {
         const langs = country.languages
         return (
             <div>
-                <h2>{country.name}</h2>
-                <div>capital {country.capital}</div>
-                <div>population {country.population}</div>
-                <h3>languages</h3>
-                <ul>
-                    {langs.map(lang => {
-                        return (
-                            <li>{lang.name}</li>
-                        )
-                })}</ul>
-                <img src={country.flag}></img>
+                <Country country={country} />
             </div>
         )
     }
