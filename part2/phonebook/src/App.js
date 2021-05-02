@@ -21,16 +21,22 @@ const App = () => {
     var idx = persons.findIndex(person => person.name === newPerson.name)
 
     if (idx !== -1) {
-      alert(`${newName} already added to the phonebook`)
-    }else {
+      //alert(`${newName} already added to the phonebook`)
+      if (newNumber !== persons[idx].number) {
+        const ans = window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
+        if (ans) {
+          personService.update(persons[idx].id, newPerson)
+      }
+    }
+  }else {
       personService.create(newPerson)
       .then(response => {
         console.log(response)
         setPersons(persons.concat(newPerson))
-        setNewName('')
-        setNewNumber('')
       }) 
     }
+    setNewName('')
+    setNewNumber('')
   }
 
   const handleNameChange = (event) => {
