@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Search from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
-import axios from 'axios'
+import personService from './personService'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -23,12 +23,13 @@ const App = () => {
     if (idx !== -1) {
       alert(`${newName} already added to the phonebook`)
     }else {
-      axios.post('http://localhost:3001/persons', newPerson)
-      .then(response => console.log(response.data))
-      //setPersons(persons.concat(newPerson))
+      personService.create('http://localhost:3001/persons', newPerson)
+      .then(response => {
+        setPersons(persons.concat(newPerson))
+        setNewName('')
+        setNewNumber('')
+      }) 
     }
-    setNewName('')
-    setNewNumber('')
   }
 
   const handleNameChange = (event) => {
@@ -53,11 +54,9 @@ const App = () => {
   })
 
   useEffect(() => {
-    const promise = axios.get('http://localhost:3001/persons')
-    
-    promise.then(response => {
-      const personsData = response.data
-      setPersons(personsData)
+    personService.getAll('http://localhost:3001/persons')
+    .then(responseData => {
+      setPersons(responseData)
     })
   }, [])
 
