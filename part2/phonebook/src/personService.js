@@ -11,4 +11,9 @@ const create = (newPerson) => {
     return request.then(response => response.data)
 }
 
-export default { getAll, create } //Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+const remove = (id) => {
+    const request = axios.delete(`${baseUrl}/${id}`)
+    return request.then(response => console.log(response))
+}
+
+export default { getAll, create, remove } //Assign object to a variable before exporting as module default  import/no-anonymous-default-export

@@ -23,8 +23,9 @@ const App = () => {
     if (idx !== -1) {
       alert(`${newName} already added to the phonebook`)
     }else {
-      personService.create('http://localhost:3001/persons', newPerson)
+      personService.create(newPerson)
       .then(response => {
+        console.log(response)
         setPersons(persons.concat(newPerson))
         setNewName('')
         setNewNumber('')
@@ -58,7 +59,7 @@ const App = () => {
     .then(responseData => {
       setPersons(responseData)
     })
-  }, [])
+  }, [persons])
 
   return (
     <div>

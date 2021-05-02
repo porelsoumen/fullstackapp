@@ -1,11 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Person from './Person'
+import personService from './personService'
 
 const Persons = (props) => {
+    //const [personToDelete, setPersonToDelete] =  useState(-1)
+
     return (
         props.matches.map(person => {
             return (
-                <Person key={person.name} name={person.name} number={person.number} />
+                <div>
+                <Person key={person.id} name={person.name} number={person.number} />
+                <button onClick={() => { window.confirm(`Delete ${person.name}`) 
+                personService.remove(person.id)}}>delete</button>
+                </div>
             )
         })
     )
