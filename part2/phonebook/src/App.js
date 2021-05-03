@@ -10,7 +10,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchTerm, setSearchTerm ] = useState('')
-  const [ successMessage, setSuccessMessage ] = useState('') 
+  const [ successMessage, setSuccessMessage ] = useState(null)
+  const [ errorMessage, setErrorMessage ] = useState(null)
 
   const addNewPerson = (event) => {
     event.preventDefault()
@@ -27,7 +28,11 @@ const App = () => {
       if (newNumber !== persons[idx].number) {
         const ans = window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
         if (ans) {
-          personService.update(persons[idx].id, newPerson)
+          const response = personService.update(persons[idx].id, newPerson)
+          response.catch(error => {
+            setErrorMessage(`Information of ${newName} has already been removed from the server`)
+            setTimeout(() => setErrorMessage(null), 5000)
+          })
       }
     }
   }else {
@@ -74,7 +79,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      {successMessage ? <Notification message={successMessage} /> : ''}
+      {successMessage ? <Notification message={successMessage} state={'success'}/> : ''}
+      {errorMessage ? <Notification message={errorMessage} state={'failure'}/> : ''}
       <Search value={searchTerm} onChange={handleSearchChange}/>
       <h3>add a new</h3>
       <PersonForm addNewPerson={addNewPerson} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange}

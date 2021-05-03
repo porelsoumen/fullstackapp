@@ -3,7 +3,6 @@ import Person from './Person'
 import personService from './personService'
 
 const Persons = (props) => {
-    //const [personToDelete, setPersonToDelete] =  useState(-1)
 
     return (
         props.matches.map(person => {
