@@ -3,12 +3,14 @@ import Search from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
 import personService from './personService'
+import Notification from './Notification'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchTerm, setSearchTerm ] = useState('')
+  const [ successMessage, setSuccessMessage ] = useState('') 
 
   const addNewPerson = (event) => {
     event.preventDefault()
@@ -33,7 +35,9 @@ const App = () => {
       .then(response => {
         console.log(response)
         setPersons(persons.concat(newPerson))
-      }) 
+        setSuccessMessage(`${newName} added successfully`)
+        setTimeout(() => setSuccessMessage(null), 5000)
+      })
     }
     setNewName('')
     setNewNumber('')
@@ -70,10 +74,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      {successMessage ? <Notification message={successMessage} /> : ''}
       <Search value={searchTerm} onChange={handleSearchChange}/>
       <h3>add a new</h3>
       <PersonForm addNewPerson={addNewPerson} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange}
-      handleNumberChange={handleNumberChange} />
+      handleNumberChange={handleNumberChange}/>
       <h3>Numbers</h3>
       <Persons matches={matches} />
     </div>
