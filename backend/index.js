@@ -61,13 +61,20 @@ app.delete('/api/person/:id', (request, response) => {
 app.post('/api/persons', (request,response) => {
     const body = request.body
     
-    if (!body.name) {
+    if (!body.name || !body.number) {
     
       return  response.status(400).json({
-                error: 'name missing'
+                error: 'name or number is missing'
             })
     }
 
+    const idx = persons.findIndex(person => person.name === body.name)
+    if (idx !== -1) {
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+    
     const maxId = persons.length == 0 ? 0 : Math.max(...persons.map(n => n.id))
     const id = Math.floor(Math.random()*100 + maxId)
     const person = {
