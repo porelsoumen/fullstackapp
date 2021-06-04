@@ -1,5 +1,6 @@
-const { request, response } = require('express')
 const express = require('express')
+const { request, response } = require('express')
+
 const app = express()
 
 let persons = [
@@ -45,17 +46,40 @@ app.get('/api/person/:id', (req,res) => {
 
 })
 
-app.delete('/api/person/:id', (req,res) => {
-    const id = Number(req.params.id)
-    const persontoDelete = persons.find(person => person.id === id)
+app.delete('/api/person/:id', (request, response) => {
+    const id = Number(request.params.id)
+    const personToDelete = persons.find(person => person.id === id)
 
-    if (persontoDelete) {
+    if (personToDelete) {
         persons = persons.filter(person => person.id !== id)
-        res.status(204).end()
+        response.status(204).end()
     } else {
-        res.status(404).end()
+        response.status(404).end()
     }
 })
+
+app.post('/api/persons', (request,response) => {
+    const body = request.body
+    
+    if (!body.name) {
+    
+      return  response.status(400).json({
+                error: 'name missing'
+            })
+    }
+
+    const maxId = persons.length == 0 ? 0 : Math.max(...persons.map(n => n.id))
+    const id = Math.floor(Math.random()*100 + maxId)
+    const person = {
+        id: id,
+        ...body
+    }
+
+    persons.concat(person)
+
+    response.status(201).end()
+})
+
 const PORT=3001
 app.listen(PORT, () => {
     console.log(`Listening to port ${PORT}`)
