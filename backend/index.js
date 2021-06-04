@@ -28,9 +28,21 @@ app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
 
-app.get('/api/info', (request,response) => {
+app.get('/info', (request,response) => {
     
     response.send('Phonebook has info for ' + persons.length + ' people<br>' + new Date)
+})
+
+app.get('/api/person/:id', (req,res) => {
+    const id = Number(req.params.id)
+    const person = persons.find(person => person.id === id)
+
+    if (person) {
+        res.json(person)
+    } else {
+        res.status(404).end()
+    }
+
 })
 const PORT=3001
 app.listen(PORT, () => {
