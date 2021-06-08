@@ -2,7 +2,10 @@ const express = require('express')
 const { request, response } = require('express')
 const morgan = require('morgan')
 const app = express()
-app.use(morgan('tiny'))
+const bodyParser = require('body-parser')
+morgan.token('body', (req, res) => JSON.stringify(req.body))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+const jsonParser = express.json()
 
 let persons = [
 {
@@ -59,7 +62,7 @@ app.delete('/api/person/:id', (request, response) => {
     }
 })
 
-app.post('/api/persons', (request,response) => {
+app.post('/api/persons', jsonParser, (request,response) => {
     const body = request.body
     
     if (!body.name || !body.number) {
@@ -84,6 +87,7 @@ app.post('/api/persons', (request,response) => {
     }
 
     persons.concat(person)
+    console.log(person)
 
     response.status(201).end()
 })
