@@ -98,7 +98,7 @@ app.post('/api/persons', jsonParser, (request,response) => {
     response.status(201).end()
 })
 
-const PORT=3001
+const PORT=process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Listening to port ${PORT}`)
 })
