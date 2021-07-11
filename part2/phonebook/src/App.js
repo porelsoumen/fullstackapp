@@ -70,11 +70,11 @@ const App = () => {
   })
 
   useEffect(() => {
-    personService.getAll('http://localhost:3001/persons')
+    personService.getAll()
     .then(responseData => {
       setPersons(responseData)
     })
-  }, [persons])
+  }, [])
 
   return (
     <div>
