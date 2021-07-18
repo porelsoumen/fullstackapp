@@ -4,7 +4,7 @@ const { request, response } = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
-const contact = require('./Contact')
+const Contact = require('./Contact')
 
 app.use(cors())
 morgan.token('body', (req, res) => JSON.stringify(req.body))
@@ -38,7 +38,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-    contact.find({}).then(contacts => {
+    Contact.find({}).then(contacts => {
         response.json(contacts)
     })
 })
@@ -82,24 +82,23 @@ app.post('/api/persons', jsonParser, (request,response) => {
             })
     }
 
-    const idx = persons.findIndex(person => person.name === body.name)
-    if (idx !== -1) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
+    // const idx = persons.findIndex(person => person.name === body.name)
+    // if (idx !== -1) {
+    //     return response.status(400).json({
+    //         error: 'name must be unique'
+    //     })
+    // }
     
-    const maxId = persons.length == 0 ? 0 : Math.max(...persons.map(n => n.id))
-    const id = Math.floor(Math.random()*100 + maxId)
-    const person = {
-        id: id,
-        ...body
-    }
-
-    persons.concat(person)
-    console.log(person)
-
-    response.status(201).end()
+    // const maxId = persons.length == 0 ? 0 : Math.max(...persons.map(n => n.id))
+    // const id = Math.floor(Math.random()*100 + maxId)
+    const person = new Contact({
+        name: body.name,
+        number: body.number
+    })
+    
+    person.save().then(savedContact => {
+        response.json(savedContact)
+    })
 })
 
 const PORT=process.env.PORT || 3001
