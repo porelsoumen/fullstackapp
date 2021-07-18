@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require('express')
-const { request, response } = require('express')
+const { request, response, next} = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
@@ -48,29 +48,29 @@ app.get('/info', (request,response) => {
     response.send('Phonebook has info for ' + persons.length + ' people<br>' + new Date)
 })
 
-app.get('/api/person/:id', (req,res) => {
-    const id = Number(req.params.id)
-    const person = persons.find(person => person.id === id)
+// app.get('/api/person/:id', (req,res) => {
+//     const id = Number(req.params.id)
+//     const person = persons.find(person => person.id === id)
 
-    if (person) {
-        res.json(person)
-    } else {
-        res.status(404).end()
-    }
+//     if (person) {
+//         res.json(person)
+//     } else {
+//         res.status(404).end()
+//     }
 
-})
+// })
 
-app.delete('/api/person/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const personToDelete = persons.find(person => person.id === id)
+// app.delete('/api/person/:id', (request, response) => {
+//     const id = Number(request.params.id)
+//     const personToDelete = persons.find(person => person.id === id)
 
-    if (personToDelete) {
-        persons = persons.filter(person => person.id !== id)
-        response.status(204).end()
-    } else {
-        response.status(404).end()
-    }
-})
+//     if (personToDelete) {
+//         persons = persons.filter(person => person.id !== id)
+//         response.status(204).end()
+//     } else {
+//         response.status(404).end()
+//     }
+// })
 
 app.post('/api/persons', jsonParser, (request,response) => {
     const body = request.body
@@ -100,7 +100,30 @@ app.post('/api/persons', jsonParser, (request,response) => {
         response.json(savedContact)
     })
 })
+app.get('/api/person/:id', (request, response) => {
+    Contact.findById(request.params.id)
+    .then(result => {
+        if (result) {
+            response.json(result)
+        } else {
+            response.status(404).end()
+        }
+    })
+    .catch(error => {
+        console.log(error.message)
+        response.status(400).send({error: 'malformatted id'})
+    })
+})
 
+app.delete('/api/persons/:id', (request, response, next) => {
+    Contact.findByIdAndRemove(request.params.id)
+    .then(result => {
+        response.status(204).end()
+    }).catch(error => {
+        console.log(error.message)
+        next(error)
+    })
+})
 const PORT=process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Listening to port ${PORT}`)
