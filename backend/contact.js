@@ -12,7 +12,7 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFind
 })
 
 const phonebookSchema = new mongoose.Schema({
-    id: Number,
+    id: String,
   name: String,
   number: String,
 })

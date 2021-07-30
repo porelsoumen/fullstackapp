@@ -100,7 +100,7 @@ app.post('/api/persons', jsonParser, (request,response) => {
         response.json(savedContact)
     })
 })
-app.get('/api/person/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response) => {
     Contact.findById(request.params.id)
     .then(result => {
         if (result) {
@@ -125,6 +125,26 @@ app.delete('/api/persons/:id', (request, response, next) => {
     })
 })
 
+app.put('/api/persons/:id', jsonParser, (request, response, next) => {
+    const body = request.body
+    console.log(body)
+    if (!body.number) {
+        response.status(400).send({error: 'missing number'})
+    }
+
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+    Contact.findByIdAndUpdate(request.params.id, person, {'new': true})
+    .then(updatedPerson => {
+        response.json(updatedPerson)
+    })
+    .catch(error => {
+        console.log(error.message)
+        next(error)
+    })
+})
 const errorHandler = (error, request, response, next) => {
     console.log(error.message)
 
