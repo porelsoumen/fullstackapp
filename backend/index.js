@@ -5,7 +5,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 const Contact = require('./Contact')
-
+app.use(express.static('build'))
 app.use(cors())
 morgan.token('body', (req, res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
@@ -33,9 +33,9 @@ let persons = [
     number: '39-23-6423122'
 }]
 
-app.get('/', (request, response) => {
-    response.send('ok')
-})
+// app.get('/', (request, response) => {
+//     response.send('ok')
+// })
 
 app.get('/api/persons', (request, response) => {
     Contact.find({}).then(contacts => {
