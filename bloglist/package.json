@@ -4,8 +4,9 @@
   "description": "list of blogs",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "test": "jest --verbose"
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
+    "test": "NODE_ENV=test jest --verbose"
   },
   "author": "Soumen Porel",
   "license": "ISC",
@@ -15,7 +16,8 @@
     "express": "^4.17.1",
     "mongoose": "^5.13.5",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "supertest": "^6.1.4"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
