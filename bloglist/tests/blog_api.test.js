@@ -25,7 +25,7 @@ describe('all blogs', () => {
 
         expect(response.body).toHaveLength(blogTestHelper.initialBlogs.length)        
     })
-    it.only('checks for the existence of the id property',async () => {
+    it('checks for the existence of the id property',async () => {
         const response = await api
             .get('/api/blogs')
             .expect(200)
@@ -33,7 +33,25 @@ describe('all blogs', () => {
 
         response.body.map(blog => expect(blog.id).toBeDefined())
     })
-    
+    it('checks for creation of blog using POST', async () => {
+        const newBlog = {
+            'title': 'blog title 3',
+            'author': 'samadrita',
+            'likes': 800,
+            'url': 'new url'
+        }
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const response = await api.get('/api/blogs')
+
+        const data = response.body.map(r => r.title)
+        expect(response.body).toHaveLength(blogTestHelper.initialBlogs.length + 1)
+        expect(data).toContain('blog title 3')
+    })
     afterAll(() => {
         mongoose.connection.close()
     })
