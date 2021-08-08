@@ -25,7 +25,14 @@ describe('all blogs', () => {
 
         expect(response.body).toHaveLength(blogTestHelper.initialBlogs.length)        
     })
+    it.only('checks for the existence of the id property',async () => {
+        const response = await api
+            .get('/api/blogs')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
 
+        response.body.map(blog => expect(blog.id).toBeDefined())
+    })
     
     afterAll(() => {
         mongoose.connection.close()
