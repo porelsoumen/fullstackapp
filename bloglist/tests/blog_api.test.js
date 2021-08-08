@@ -52,7 +52,7 @@ describe('all blogs', () => {
         expect(response.body).toHaveLength(blogTestHelper.initialBlogs.length + 1)
         expect(data).toContain('blog title 3')
     })
-    it.only('tests for likes default to zero',async () => {
+    it('tests for likes default to zero',async () => {
         const newBlog = {
             'title': 'blog title 4',
             'author': 'nepal',
@@ -65,6 +65,17 @@ describe('all blogs', () => {
             .expect('Content-Type', /application\/json/)
         
         expect(response.body.likes).toBe(0)
+    })
+    it('tests existence of title and url', async () => {
+        const newBlog = {
+            'author': 'nepal',
+            'likes': 97
+        }
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
     })
     afterAll(() => {
         mongoose.connection.close()
