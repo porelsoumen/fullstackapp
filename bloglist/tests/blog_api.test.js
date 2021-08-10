@@ -6,18 +6,13 @@ const Blog = require('../models/blog')
 
 const api = supertest(app)
 
-describe('all blogs', () => {
+beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(blogTestHelper.initialBlogs)
+})
 
-    beforeEach(async () => {
-        await Blog.deleteMany({})
-
-        let blogObj = new Blog(blogTestHelper.initialBlogs[0])
-        await blogObj.save()
-
-        blogObj = new Blog(blogTestHelper.initialBlogs[0])
-        await blogObj.save()
-    })
-    it('checks for getting all blogs in json', async () => {
+describe('some initial blogs saved', () => {
+    it('all blogs are returned as json', async () => {
         const response = await api
             .get('/api/blogs')
             .expect(200)
@@ -33,6 +28,8 @@ describe('all blogs', () => {
 
         response.body.map(blog => expect(blog.id).toBeDefined())
     })
+})
+describe('addition of a new blog', () => {
     it('checks for creation of blog using POST', async () => {
         const newBlog = {
             'title': 'blog title 3',
@@ -52,6 +49,8 @@ describe('all blogs', () => {
         expect(response.body).toHaveLength(blogTestHelper.initialBlogs.length + 1)
         expect(data).toContain('blog title 3')
     })
+})
+describe('checks the properties of a blog', () => {
     it('tests for likes default to zero',async () => {
         const newBlog = {
             'title': 'blog title 4',
@@ -63,7 +62,7 @@ describe('all blogs', () => {
             .send(newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/)
-        
+            
         expect(response.body.likes).toBe(0)
     })
     it('tests existence of title and url', async () => {
@@ -77,7 +76,25 @@ describe('all blogs', () => {
             .expect(400)
             .expect('Content-Type', /application\/json/)
     })
-    afterAll(() => {
-        mongoose.connection.close()
+})
+describe('deletion of a blog', () => {
+    it('succeeds with 204 if the id is valid', async () => {
+        const blogsAtStart = await blogTestHelper.blogsInDb()
+        console.log(blogsAtStart)
+        const blogToDelete = blogsAtStart[0]
+
+        await api
+            .delete(`/api/blogs/${blogToDelete.id}`)
+            .expect(204)
+
+        const blogsAtEnd = await blogTestHelper.blogsInDb()
+
+        expect(blogsAtEnd).toHaveLength(blogTestHelper.initialBlogs.length - 1)
+
+        const titles = blogsAtEnd.map(r => r.title)
+        expect(titles).not.toContain(blogToDelete.title)
     })
+})
+afterAll(() => {
+    mongoose.connection.close()
 })
