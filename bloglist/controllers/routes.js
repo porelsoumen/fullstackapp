@@ -26,4 +26,12 @@ blogRouter.delete('/:id', async (request, response) => {
     response.status(204).end()
 })
 
+blogRouter.get('/:id', async (request, response) => {
+    const blog = await Blog.findById(request.params.id)
+    if (!blog) {
+        return response.status(404).json({ error: 'Invalid Id'})
+    }
+    response.status(200).json(blog)
+})
+
 module.exports = blogRouter

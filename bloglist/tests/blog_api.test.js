@@ -80,7 +80,6 @@ describe('checks the properties of a blog', () => {
 describe('deletion of a blog', () => {
     it('succeeds with 204 if the id is valid', async () => {
         const blogsAtStart = await blogTestHelper.blogsInDb()
-        console.log(blogsAtStart)
         const blogToDelete = blogsAtStart[0]
 
         await api
@@ -93,6 +92,26 @@ describe('deletion of a blog', () => {
 
         const titles = blogsAtEnd.map(r => r.title)
         expect(titles).not.toContain(blogToDelete.title)
+    })
+})
+describe('view a blog', () => {
+    it('should succeed with 200 if the id is valid', async () => {
+        const allBlogs = await blogTestHelper.blogsInDb()
+        const blogToView = allBlogs[allBlogs.length - 1]
+
+        const response = await api
+            .get(`/api/blogs/${blogToView.id}`)
+            .expect(200)
+
+        const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
+        expect(response.body).toEqual(processedBlogToView)
+    })
+    it('should fail with 404 if the id is invalid', async () => {
+        const nonExistingId = await blogTestHelper.nonExistingId()
+
+        await api
+            .get(`/api/blogs/${nonExistingId}`)
+            .expect(404)
     })
 })
 afterAll(() => {
