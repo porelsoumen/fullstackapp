@@ -47,8 +47,29 @@ describe('creation of invalid user', () => {
         expect(response.body.error).toContain('expected `username` to be unique')
         const usersAtEnd = await userTestHelper.usersInDb()
         expect(usersAtEnd).toHaveLength(usersBefore.length)
+    })  
+})
+describe('creation of a valid user', () => {
+    it('should create a new valid user', async () => {
+        const usersBefore = await userTestHelper.usersInDb()
+        
+        const newUser = {
+            name: 'testuser1',
+            username: 'testusername1',
+            password: 'testuserpassword1',
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await userTestHelper.usersInDb()
+        expect(usersAtEnd).toHaveLength(usersBefore.length + 1)
     })
 })
-afterAll(() => {
+afterAll(async () => {
+    await User.deleteMany({})
     mongoose.connection.close()
 })

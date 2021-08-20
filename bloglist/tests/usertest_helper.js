@@ -12,9 +12,9 @@ const initialUsers = [
         'passwordHash': '$2b$10$DJp94Z8y.hJ7yyc1fzclt.sIOQfnvXGKEX4JJ1qft.KjMn9y9N7BW'
     },
     {
-        'name': 'Soumen P',
-        'username': 'pofsdf',
-        'passwordHash': '$2b$10$b3n52jzqqkZuNf4mLmvE3OWd.5xD6LUxU2aBecxqtgW.YuVyjfMr2'
+        'name':'testuser',
+        'username':'testusername',
+        'passwordHash':'$2b$10$9v6s.hMUOLdOYMrbCZGT2OjWUXVovmDKC97niYEOKrNZJnLWKYHO.'
     }
 ]
 module.exports = {
