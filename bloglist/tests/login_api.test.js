@@ -4,7 +4,7 @@ const supertest = require('supertest')
 const userTestHelper = require('./usertest_helper')
 const User = require('../models/user')
 const api = supertest(app)
-beforeAll(async () => {
+beforeEach(async () => {
     await User.deleteMany({})
     await User.insertMany(userTestHelper.initialUsers)
 })

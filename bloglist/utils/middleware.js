@@ -20,12 +20,14 @@ const tokenExtractor = (request, response, next) => {
 
 const userExtractor = async (request, response, next) => {
     const token = request.token
-    console.log(token)
     const decodedToken = jwt.verify(token, process.env.SECRET)
-    if (!token || !decodedToken) {
+    
+    if (!token || !decodedToken.id) {
         return response.status(401).json({error: 'token missing or invalid'})
     }
-    request.user = await User.findById(decodedToken.id)
+    
+    const postUser = await User.findById(decodedToken.id)
+    request.user = postUser
     next()
 }
 const unknownEndpoint = (request, response) => {
@@ -39,8 +41,9 @@ const errorHandler = (error, request, response, next) => {
         response.status(400).send({error: 'malformatted id'})
     } else if (error.name === 'ValidationError') {
         response.status(400).json({error: error.message})
+    } else if (error.name === 'JsonWebTokenError') {
+        response.status(401).json({error: 'invalid token'})
     }
-
     next(error)
 }
 

@@ -13,8 +13,11 @@ blogRouter.post('/', middleware.userExtractor, async (request, response) => {
         return response.status(400).json({ error: 'Missing title & URL'})
     }
 
+    if (!request.user) {
+        return response.status(400).json({ error: 'Invalid or missing user'})
+    }
     const user = request.user
-
+    
     if (!body.likes) {
         body.likes = 0
     }
@@ -30,6 +33,10 @@ blogRouter.post('/', middleware.userExtractor, async (request, response) => {
 blogRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
 
     const user = request.user
+    
+    if (!request.user) {
+        return response.status(400).json({ error: 'Invalid or missing user'})
+    }
     const blog = await Blog.findById(request.params.id)
 
     if (user.id !== blog.user.toString()) {
