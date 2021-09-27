@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "start:test": "NODE_ENV=test nodemon index.js"
   },
   "author": "Soumen Porel",
   "license": "ISC",
